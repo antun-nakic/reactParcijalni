@@ -1,25 +1,46 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import "./App.css";
+import { Container } from "react-bootstrap";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import { connect } from "react-redux";
+import Login from "./components/Login";
+import Aplikacija from "./containers/Aplikacija";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+  render() {
+    return (
+      <Router>
+        <Container>
+          <Routes>
+            <Route
+              path='/'
+              element={
+                this.props.login == null ? (
+                  <Login />
+                ) : (
+                  <Navigate replace to='/app' />
+                )
+              }
+            />
+            <Route path='/app' element={<Aplikacija />}></Route>
+          </Routes>
+        </Container>
+      </Router>
+    );
+  }
 }
 
-export default App;
+function mapStateToProps(state) {
+  return {
+    login: state.login,
+  };
+}
+
+const mapDispatchToProps = {};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
